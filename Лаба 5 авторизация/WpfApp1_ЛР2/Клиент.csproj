@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="1140160-illustration-flowers-long-hair-anime-anime-girls-thigh-highs-Vocaloid-Hatsune-Miku-skirt-braids-neckties-flower-in-hair-floating-pink-flower-petals-Sakura-Miku-flower-p.jpg" />
+    <None Remove="21_9_W — копия.png" />
+    <None Remove="84130-hatsune-miku-vocaloid-anime-anime-girl-hd-artist.jpg" />
+    <None Remove="Mag.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Json.Net" Version="1.0.33" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Net.Http.Json" Version="9.0.9" />
+    <PackageReference Include="System.Text.Json" Version="9.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Mag.jpg" />
+  </ItemGroup>
+
+</Project>
