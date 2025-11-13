@@ -28,29 +28,12 @@ namespace WebApplicationЛАБА1
             );
             app.MapPost("/postRole", (Role obj, HttpContext context) =>
             {
-                context.Request.Cookies.TryGetValue("key", out string? key);
-                if (keys.isAuth(key))
-                {
-                    Db.AddAsync(obj);
-                    Db.SaveChanges();
-                }
-                //Role newRole = new Role { name = obj.name };
-                //Db.AddAsync(newRole);
-                //Db.SaveChanges();
-
+                post<Role>(context, Db, keys, obj);
             }
             );
             app.MapPost("/postUser", (User obj, HttpContext context) =>
             {
-                //User newUser = new User { login = obj.login, password = obj.password, roleId = obj.roleId };
-                //Db.AddAsync(newUser);
-                //Db.SaveChanges();
-                context.Request.Cookies.TryGetValue("key", out string? key);
-                if (keys.isAuth(key))
-                {
-                    Db.AddAsync(obj);
-                    Db.SaveChanges();
-                }
+                post<User>(context, Db, keys, obj);
             }
             );
             app.MapPost("/recreate", (HttpContext context) =>
@@ -89,9 +72,30 @@ namespace WebApplicationЛАБА1
 
             app.Run();
         }
+        static void post<T>(HttpContext httpContext, ApplicationContext Db, Keys tokenManager, T obj)
+        {
+            //get cookies 
+            httpContext.Request.Cookies.TryGetValue("key", out string? key);
+
+            if (key != null)
+            {
+                if (tokenManager.isAuth(key))
+                {
+                    Db.AddAsync(obj);
+                    Db.SaveChanges();
+                }
+                else
+                {
+                    Console.WriteLine("ERROR post<T>(): tokenManager.isAuth(key) == false");
+                }
+            }
+            else
+            {
+                Console.WriteLine("ERROR post<T>(): (key != null) == false");
+            }
+        }
         static List<T> get<T>(HttpContext htttpContext, ApplicationContext Db, Keys tokenManager) where T : class
         {
-            //T obj = default(T);
             //get cookies
             htttpContext.Request.Cookies.TryGetValue("key", out string? key);
 
