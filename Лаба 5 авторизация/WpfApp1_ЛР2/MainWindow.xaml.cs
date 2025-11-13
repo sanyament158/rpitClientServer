@@ -35,7 +35,6 @@ namespace WpfApp1_ЛР2
 
         private async void GetUserRoleB(object sender, RoutedEventArgs e)
         {
-            HttpClient httpClient = new HttpClient();
             List<User>? objs = await httpClient.GetFromJsonAsync<List<User>>(uri + "getUsers");
 
             foreach (var obj in objs)

@@ -12,32 +12,18 @@ namespace WebApplicationЛАБА1
         {
             Keys keys = new Keys();
             ApplicationContext Db = new ApplicationContext();
-            
+         
             var builder = WebApplication.CreateBuilder(args);
             var app = builder.Build();
 
             app.MapGet("/getUsers", (HttpContext context) =>
             {
-                // получаем печеньки
-                context.Request.Cookies.TryGetValue("key", out string? key);
-                List<User> objs = new List<User>();
-                objs = Db.users.ToList();
-                if (keys.isAuth(key))
-                {
-                    objs = Db.users.ToList();
-                }                
-                return objs;
+                return get<User>(context, Db, keys);
             }
             );
             app.MapGet("/getRoles", (HttpContext context) =>
             {
-                context.Request.Cookies.TryGetValue("key", out string? key);
-                List<Role> objs = new List<Role>();
-                if (keys.isAuth(key))
-                {
-                    objs = Db.roles.ToList();
-                }
-                return objs;
+                return get<Role>(context, Db, keys);
             }
             );
             app.MapPost("/postRole", (Role obj, HttpContext context) =>
@@ -103,8 +89,34 @@ namespace WebApplicationЛАБА1
 
             app.Run();
         }
+        static List<T> get<T>(HttpContext htttpContext, ApplicationContext Db, Keys tokenManager) where T : class
+        {
+            //T obj = default(T);
+            //get cookies
+            htttpContext.Request.Cookies.TryGetValue("key", out string? key);
 
-
+            List<T> objs = new List<T>();
+            if (key != null)
+            {
+                if (tokenManager.isAuth(key))
+                {
+                    objs = Db.Set<T>().ToList();
+                    return objs;
+                }
+                else 
+                {
+                    Console.WriteLine("ERROR get<T>(): tokenManager.isAuth(key) == false");
+                    return objs;
+                }
+            }
+            else 
+            {
+                Console.WriteLine("ERROR get<T>(): (key != null) == false");
+                Console.WriteLine("count objs - " + objs.Count.ToString());
+                return objs;
+            }
+            
+        }
     }
     public class Key
     // токен, связанный с user
